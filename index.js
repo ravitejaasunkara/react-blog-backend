@@ -3,7 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const router = require('./router');
 require('dotenv').config();
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 3000;
 const url = 'mongodb+srv://savenotes:savehere123@notes.dckjsam.mongodb.net/?retryWrites=true&w=majority';
 app.use(express.json());
 mongoose.connect(
@@ -22,5 +22,5 @@ mongoose.connect(
 )
 app.use(router);
 app.listen(PORT, () => {
-    console.log('App is running');
+    console.log(`App is running ${PORT}`);
 })
