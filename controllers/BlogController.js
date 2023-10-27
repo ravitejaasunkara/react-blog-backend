@@ -50,5 +50,5 @@ exports.login = async(req,res) => {
         ErrorResponse(res,{email:email},"Email or Password is wrong please check.");
         return;
     }
-    SuccessResponse(res,{email:email},"Login successful.");
+    SuccessResponse(res,{email:email,username:checkUserExist?.displayName},"Login successful.");
 }
