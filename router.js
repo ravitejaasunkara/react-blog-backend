@@ -13,6 +13,10 @@ app.get('/',(req,res) => {
 app.get('/getAllBlogs',controller.getAllBlogs);
 app.post('/saveContactInfo',controller.saveContactData);
 
+app.post('/register',controller.signup);
+
+app.post('/login',controller.login);
+
 app.get('/*',(req,res) => {
     InvalidResponse(res);
 })
