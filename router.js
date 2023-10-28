@@ -17,6 +17,8 @@ app.post('/register',controller.signup);
 
 app.post('/login',controller.login);
 
+app.post('/saveauthor',controller.saveAuthor);
+
 app.get('/*',(req,res) => {
     InvalidResponse(res);
 })

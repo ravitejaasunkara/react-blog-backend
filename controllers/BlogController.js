@@ -4,6 +4,7 @@ const { SuccessResponse, ErrorResponse } = require('../utils/Response');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const authModel = require('../models/AuthModel');
+const authorModel = require('../models/AuthorModel');
 
 exports.saveContactData = async (req, res) => {
     try {
@@ -22,33 +23,52 @@ exports.getAllBlogs = async (req, res) => {
     }
 }
 
-exports.signup = async(req,res) => {
-    const hashedPassword = await bcrypt.hash(req?.body?.password,saltRounds);
-    const newData = {...req?.body,hashedPassword};
-    const isUserExist = await authModel.find({email:req?.body?.email});
-    if(isUserExist.length > 0){
-        ErrorResponse(res,{username:isUserExist[0]?.displayName},"User already registered");
-    }else{
-        try{
+exports.signup = async (req, res) => {
+    const hashedPassword = await bcrypt.hash(req?.body?.password, saltRounds);
+    const newData = { ...req?.body, hashedPassword };
+    const isUserExist = await authModel.find({ email: req?.body?.email });
+    if (isUserExist.length > 0) {
+        ErrorResponse(res, { username: isUserExist[0]?.displayName }, "User already registered");
+    } else {
+        try {
             const user = await authModel.create(newData);
-            console.log('User',user);
-            SuccessResponse(res,{username:user?.displayName,email:user?.email},"Successfully registered")
-        }catch(error){
-            ErrorResponse(res,[],error?.message);
+            console.log('User', user);
+            SuccessResponse(res, { username: user?.displayName, email: user?.email }, "Successfully registered")
+        } catch (error) {
+            ErrorResponse(res, [], error?.message);
         }
     }
 }
 
-exports.login = async(req,res) => {
-    const {email,password} = req?.body;
-    const checkUserExist = await authModel.findOne({email:email});
-    if(checkUserExist == null){
-        ErrorResponse(res,{email:email},"User not found.");
+exports.login = async (req, res) => {
+    const { email, password } = req?.body;
+    const checkUserExist = await authModel.findOne({ email: email });
+    if (checkUserExist == null) {
+        ErrorResponse(res, { email: email }, "User not found.");
         return;
     }
-    if(!(await bcrypt.compare(password,checkUserExist?.hashedPassword))){
-        ErrorResponse(res,{email:email},"Email or Password is wrong please check.");
+    if (!(await bcrypt.compare(password, checkUserExist?.hashedPassword))) {
+        ErrorResponse(res, { email: email }, "Email or Password is wrong please check.");
         return;
     }
-    SuccessResponse(res,{email:email,username:checkUserExist?.displayName},"Login successful.");
+    SuccessResponse(res, { email: email, username: checkUserExist?.displayName }, "Login successful.");
+}
+
+exports.saveAuthor = async (req, res) => {
+    try {
+        const data = await authorModel.findOne({ name: req?.body?.name });
+        if (data === null) {
+            const resp = await authorModel.create(req?.body);
+            SuccessResponse(res, { name: resp?.name,totalBlogs:resp?.totalBlogs }, "Author saved");
+        } else {
+            const newResp = { name:data?.name,email:data?.email,totalBlogs:Number.parseInt(data?.totalBlogs) +1 };
+            const resp = await authorModel.findOneAndUpdate({ name: req?.body?.name },
+                newResp,
+                { new: true }
+            );
+            SuccessResponse(res, { name: data?.name,totalBlogs:resp?.totalBlogs }, "Author saved");
+        }
+    } catch (error) {
+        ErrorResponse(res, error, "Some error in saving author to db");
+    }
 }
