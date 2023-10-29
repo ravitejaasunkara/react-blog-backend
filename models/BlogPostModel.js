@@ -21,6 +21,10 @@ const BlogPostSchema = mongoose.Schema(
         blogTags:{
             type:[String],
             default:[]
+        },
+        authorName:{
+            type:String,
+            default:"RPS"
         }
     },
     {

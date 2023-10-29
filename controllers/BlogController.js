@@ -18,9 +18,9 @@ exports.saveContactData = async (req, res) => {
 exports.getAllBlogs = async (req, res) => {
     const data = await blogPostModel.find({});
     if (data?.length > 0) {
-        SuccessResponse(res, data);
+        SuccessResponse(res, data,'Data fetched successfully.');
     } else {
-        ErrorResponse(res, data);
+        ErrorResponse(res, data,'No data found.');
     }
 }
 
@@ -76,8 +76,16 @@ exports.saveAuthor = async (req, res) => {
 
 exports.saveNewBlog = async(req,res) => {
     try{
-        const data = await blogModel.create(req?.body);
-        SuccessResponse(res,{blogTitle:data?.blogTitle},'Blog created successfully.');
+        if(req?.body?.authorName.length === 0){
+            const data = {...req?.body,authorName:"RPS"};
+            const resp = await blogModel.create(data);
+            SuccessResponse(res,{blogTitle:data?.blogTitle},'Blog created successfully.');
+            return;
+        }else{
+            const data = await blogModel.create(req?.body);
+            SuccessResponse(res,{blogTitle:data?.blogTitle},'Blog created successfully.');
+            return;
+        }
     }catch(error){
         ErrorResponse(res,{error:error?.message},'Some error occurred while creating.');
     }

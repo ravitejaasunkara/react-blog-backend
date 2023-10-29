@@ -10,7 +10,7 @@ app.use(cors());
 app.get('/',(req,res) => {
     res.json({message:"Hello"});
 })
-app.get('/getAllBlogs',controller.getAllBlogs);
+app.get('/getallblogs',controller.getAllBlogs);
 app.post('/saveContactInfo',controller.saveContactData);
 
 app.post('/register',controller.signup);
