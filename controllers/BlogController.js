@@ -5,6 +5,7 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 const authModel = require('../models/AuthModel');
 const authorModel = require('../models/AuthorModel');
+const blogModel = require('../models/BlogPostModel');
 
 exports.saveContactData = async (req, res) => {
     try {
@@ -70,5 +71,14 @@ exports.saveAuthor = async (req, res) => {
         }
     } catch (error) {
         ErrorResponse(res, error, "Some error in saving author to db");
+    }
+}
+
+exports.saveNewBlog = async(req,res) => {
+    try{
+        const data = await blogModel.create(req?.body);
+        SuccessResponse(res,{blogTitle:data?.blogTitle},'Blog created successfully.');
+    }catch(error){
+        ErrorResponse(res,{error:error?.message},'Some error occurred while creating.');
     }
 }

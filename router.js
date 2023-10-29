@@ -19,6 +19,8 @@ app.post('/login',controller.login);
 
 app.post('/saveauthor',controller.saveAuthor);
 
+app.post('/savenewblog',controller.saveNewBlog);
+
 app.get('/*',(req,res) => {
     InvalidResponse(res);
 })

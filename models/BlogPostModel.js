@@ -20,7 +20,7 @@ const BlogPostSchema = mongoose.Schema(
         },
         blogTags:{
             type:[String],
-            required:true
+            default:[]
         }
     },
     {
