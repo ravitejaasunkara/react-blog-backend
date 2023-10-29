@@ -21,6 +21,8 @@ app.post('/saveauthor',controller.saveAuthor);
 
 app.post('/savenewblog',controller.saveNewBlog);
 
+app.get('/article/:articleId',controller.getPostById);
+
 app.get('/*',(req,res) => {
     InvalidResponse(res);
 })

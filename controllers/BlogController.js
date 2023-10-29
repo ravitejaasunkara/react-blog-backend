@@ -6,6 +6,7 @@ const saltRounds = 10;
 const authModel = require('../models/AuthModel');
 const authorModel = require('../models/AuthorModel');
 const blogModel = require('../models/BlogPostModel');
+const { ObjectId } = require('mongodb');
 
 exports.saveContactData = async (req, res) => {
     try {
@@ -18,9 +19,9 @@ exports.saveContactData = async (req, res) => {
 exports.getAllBlogs = async (req, res) => {
     const data = await blogPostModel.find({});
     if (data?.length > 0) {
-        SuccessResponse(res, data,'Data fetched successfully.');
+        SuccessResponse(res, data, 'Data fetched successfully.');
     } else {
-        ErrorResponse(res, data,'No data found.');
+        ErrorResponse(res, data, 'No data found.');
     }
 }
 
@@ -60,33 +61,43 @@ exports.saveAuthor = async (req, res) => {
         const data = await authorModel.findOne({ name: req?.body?.name });
         if (data === null) {
             const resp = await authorModel.create(req?.body);
-            SuccessResponse(res, { name: resp?.name,totalBlogs:resp?.totalBlogs }, "Author saved");
+            SuccessResponse(res, { name: resp?.name, totalBlogs: resp?.totalBlogs }, "Author saved");
         } else {
-            const newResp = { name:data?.name,email:data?.email,totalBlogs:Number.parseInt(data?.totalBlogs) +1 };
+            const newResp = { name: data?.name, email: data?.email, totalBlogs: Number.parseInt(data?.totalBlogs) + 1 };
             const resp = await authorModel.findOneAndUpdate({ name: req?.body?.name },
                 newResp,
                 { new: true }
             );
-            SuccessResponse(res, { name: data?.name,totalBlogs:resp?.totalBlogs }, "Author saved");
+            SuccessResponse(res, { name: data?.name, totalBlogs: resp?.totalBlogs }, "Author saved");
         }
     } catch (error) {
         ErrorResponse(res, error, "Some error in saving author to db");
     }
 }
 
-exports.saveNewBlog = async(req,res) => {
-    try{
-        if(req?.body?.authorName.length === 0){
-            const data = {...req?.body,authorName:"RPS"};
+exports.saveNewBlog = async (req, res) => {
+    try {
+        if (req?.body?.authorName.length === 0) {
+            const data = { ...req?.body, authorName: "RPS" };
             const resp = await blogModel.create(data);
-            SuccessResponse(res,{blogTitle:data?.blogTitle},'Blog created successfully.');
+            SuccessResponse(res, { blogTitle: data?.blogTitle }, 'Blog created successfully.');
             return;
-        }else{
+        } else {
             const data = await blogModel.create(req?.body);
-            SuccessResponse(res,{blogTitle:data?.blogTitle},'Blog created successfully.');
+            SuccessResponse(res, { blogTitle: data?.blogTitle }, 'Blog created successfully.');
             return;
         }
+    } catch (error) {
+        ErrorResponse(res, { error: error?.message }, 'Some error occurred while creating.');
+    }
+}
+
+exports.getPostById = async (req, res) => {
+    const _id = ObjectId(req?.params?.articleId);
+    try{
+        const post = await blogModel.findById(_id);
+        SuccessResponse(res,post,'Post fetched successfully.');
     }catch(error){
-        ErrorResponse(res,{error:error?.message},'Some error occurred while creating.');
+        ErrorResponse(res,error?.message,'Post not found.');
     }
 }
