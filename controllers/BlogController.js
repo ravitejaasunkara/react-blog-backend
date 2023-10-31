@@ -115,7 +115,6 @@ exports.postComment = async(req,res) => {
 
 exports.getCommentsByPostId = async(req,res) => {
     const postId = req?.params?.postId;
-    console.log(postId);
     try{
         const comments = await commentModel.find({postId:postId});
         SuccessResponse(res,comments,'Comments fetched successfully.');

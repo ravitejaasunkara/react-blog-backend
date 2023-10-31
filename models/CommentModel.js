@@ -13,7 +13,7 @@ const CommentSchema = new mongoose.Schema({
         type:String,
         default:"anonymous user"
     }
-});
+},{timestamps:true});
 
 const CommentModel = mongoose.model('CommentModel',CommentSchema,'CommentsData');
 module.exports = CommentModel;
