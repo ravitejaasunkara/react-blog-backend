@@ -6,6 +6,7 @@ const saltRounds = 10;
 const authModel = require('../models/AuthModel');
 const authorModel = require('../models/AuthorModel');
 const blogModel = require('../models/BlogPostModel');
+const commentModel = require('../models/CommentModel');
 const { ObjectId } = require('mongodb');
 
 exports.saveContactData = async (req, res) => {
@@ -99,5 +100,26 @@ exports.getPostById = async (req, res) => {
         SuccessResponse(res,post,'Post fetched successfully.');
     }catch(error){
         ErrorResponse(res,error?.message,'Post not found.');
+    }
+}
+
+exports.postComment = async(req,res) => {
+    const postId = req?.params.postId;
+    try{
+        const data = await commentModel.create(req?.body);
+        SuccessResponse(res,data,'Comment added.');
+    }catch(error){
+        ErrorResponse(res,error?.message,'some error in adding comment');
+    }
+}
+
+exports.getCommentsByPostId = async(req,res) => {
+    const postId = req?.params?.postId;
+    console.log(postId);
+    try{
+        const comments = await commentModel.find({postId:postId});
+        SuccessResponse(res,comments,'Comments fetched successfully.');
+    }catch(error){
+        ErrorResponse(res,error?.message,'Comments not found');
     }
 }

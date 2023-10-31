@@ -23,6 +23,11 @@ app.post('/savenewblog',controller.saveNewBlog);
 
 app.get('/article/:articleId',controller.getPostById);
 
+app.post('/post/comment/save',controller.postComment)
+
+app.get('/post/comment/retrieve/:postId',controller.getCommentsByPostId);
+
+
 app.get('/*',(req,res) => {
     InvalidResponse(res);
 })
