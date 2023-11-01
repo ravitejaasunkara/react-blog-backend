@@ -54,7 +54,7 @@ exports.login = async (req, res) => {
         ErrorResponse(res, { email: email }, "Email or Password is wrong please check.");
         return;
     }
-    SuccessResponse(res, { email: email, username: checkUserExist?.displayName }, "Login successful.");
+    SuccessResponse(res, { email: email, username: checkUserExist?.displayName,joined:checkUserExist?.createdAt }, "Login successful.");
 }
 
 exports.saveAuthor = async (req, res) => {
