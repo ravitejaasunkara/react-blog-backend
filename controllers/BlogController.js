@@ -131,3 +131,12 @@ exports.getAllAuthors = async(req,res) => {
         ErrorResponse(res,error?.message,'Authors not found.');
     }
 }
+
+exports.saveContact = async(req,res) => {
+    try{
+        const resp = await contactModel.create(req?.body);
+        SuccessResponse(res,resp,'Your message has been sent,Our team will get in touch with you soon.')
+    }catch(error){
+        ErrorResponse(res,error?.message,'Some error has occured. Please try again');
+    }
+}
