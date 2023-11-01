@@ -27,6 +27,8 @@ app.post('/post/comment/save',controller.postComment)
 
 app.get('/post/comment/retrieve/:postId',controller.getCommentsByPostId);
 
+app.get('/allauthors',controller.getAllAuthors);
+
 
 app.get('/*',(req,res) => {
     InvalidResponse(res);

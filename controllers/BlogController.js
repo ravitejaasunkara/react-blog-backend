@@ -122,3 +122,12 @@ exports.getCommentsByPostId = async(req,res) => {
         ErrorResponse(res,error?.message,'Comments not found');
     }
 }
+
+exports.getAllAuthors = async(req,res) => {
+    try{
+        const authors = await authorModel.find({});
+        SuccessResponse(res,authors,'Authors fetched successfully.');
+    }catch(error){
+        ErrorResponse(res,error?.message,'Authors not found.');
+    }
+}
