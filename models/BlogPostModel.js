@@ -2,35 +2,34 @@ const mongoose = require('mongoose');
 
 const BlogPostSchema = mongoose.Schema(
     {
-        blogTitle:{
-            type:String,
-            required:true
+        blogTitle: {
+            type: String,
+            required: true
         },
-        blogDescription:{
-            type:String,
-            required:true
+        blogDescription: {
+            type: String,
+            required: true
         },
-        blogThumbnail:{
-            type:String,
-            required:true
+        blogThumbnail: {
+            type: String,
+            required: true
         },
-        blogMarkdown:{
-            type:String,
-            required:true
+        blogMarkdown: {
+            type: String,
+            required: true
         },
-        blogTags:{
-            type:[String],
-            default:[]
+        blogTags: {
+            type: [String],
+            default: []
         },
-        authorName:{
-            type:String,
-            default:"RPS"
+        authorName: {
+            type: String,
         }
     },
     {
-        strict:true,
-        timestamps:true
+        strict: true,
+        timestamps: true
     }
 );
-const BlogPostModel = mongoose.model('BlogPostModel',BlogPostSchema,'BlogPostsData');
+const BlogPostModel = mongoose.model('BlogPostModel', BlogPostSchema, 'BlogPostsData');
 module.exports = BlogPostModel;

@@ -97,7 +97,11 @@ exports.getPostById = async (req, res) => {
     const _id = ObjectId(req?.params?.articleId);
     try{
         const post = await blogModel.findById(_id);
-        SuccessResponse(res,post,'Post fetched successfully.');
+        if(post?.authorName?.length > 0){
+            SuccessResponse(res,post,'Post fetched successfully.');
+        }else{
+            SuccessResponse(res,{...post,authorName:"RPS"},'Post fetched successfully.');
+        }
     }catch(error){
         ErrorResponse(res,error?.message,'Post not found.');
     }
