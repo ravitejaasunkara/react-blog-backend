@@ -78,7 +78,7 @@ exports.saveAuthor = async (req, res) => {
 
 exports.saveNewBlog = async (req, res) => {
     try {
-        if (req?.body?.authorName.length === 0) {
+        if (req?.body?.authorName?.length === 0 || req?.body?.authorName === null) {
             const data = { ...req?.body, authorName: "RPS" };
             const resp = await blogModel.create(data);
             SuccessResponse(res, { blogTitle: data?.blogTitle }, 'Blog created successfully.');
@@ -100,7 +100,8 @@ exports.getPostById = async (req, res) => {
         if(post?.authorName?.length > 0){
             SuccessResponse(res,post,'Post fetched successfully.');
         }else{
-            SuccessResponse(res,{...post,authorName:"RPS"},'Post fetched successfully.');
+            post.authorName = "RPS";
+            SuccessResponse(res,post,'Post fetched successfully.');
         }
     }catch(error){
         ErrorResponse(res,error?.message,'Post not found.');
